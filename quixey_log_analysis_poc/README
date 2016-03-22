@@ -1,0 +1,52 @@
+Quixey Log Analysis POC:
+What Quixey is about - Quixey - Real-time Search Engine which gives out clear perception of what exactly the people need at that moment (say for example - a person trying to search for travelling to one place to another - it should show a similar cab ratings as well as other transports). Similar to a google search engine.. (Also trying to bring up with the place of google search engine you see in Android - with Micromax and few stuffs).
+
+The main objective of this is to bring up the insights from the log file(query depth, performance)
+expected performance - <100ms @ 900qps 
+
+So , from the log data (Trace Log), we are calculating the metrics follows:
+    Total Time Taken = Differences in TimeStamp for the specific sequence in MilliSeconds
+    Total number of Requests
+    Request Frequency (query depth)
+    Average Time Taken for Each Request
+
+Requirements
+============
+
+    Java 1.7 or later 
+    Python(by default - it is available in Mac and Ubuntu)    
+
+Installation
+============
+
+    1) Apache Kafka 
+    Download: https://kafka.apache.org/downloads.html (Apache Kafka)
+    kafka_2.10-0.8.2.1.tgz (asc, md5) 
+    untar the files, then follow the instructions available at the link above.
+    
+    2) Apache Spark 
+    Download: using the mirror link , wget using the command below 
+    wget http://d3kbcqa49mib13.cloudfront.net/spark-1.5.1-bin-hadoop2.6.tgz
+
+    3) Add the following jar files in the dependencies folder : 
+       a) Spark-Kafka jar file - spark-streaming-kafka_2.10 - Version 1.6.0 - jar
+       b) spark_core_2.10 - 1.6.0 version - jar
+       c) log4j version - 1.2.17 - jar 
+
+ Steps for running the project:
+ ==============================
+
+ 	1) Start the kafka server and zookeeper server.
+ 	2) Run the python script for getting the trace log from the log data. 
+ 	python scriptname ~/Directorypath 
+ 	3) Update the topic name of kafka for getting the log data for processing - in the properties in your Java IDE - (it will be under src/main/properties : quixey.spark.properties)
+    a) Kafka Input - Topic - from where the data is coming into the spark for analyzing - by default it is quixey-logs
+    b) Kafka Output - Topic - from where the data goes to the nodejs server for visualization - by default - it is log-analysis-output
+ 	4) Run the Java Application
+
+For Visualization: 
+
+    1) run npm install from the folder of your visualization directory 
+    in index.js the topic name is by default log-analysis-output
+    2) Run the command : nodejs server.js
+    3) Visualize in localhost:9000
